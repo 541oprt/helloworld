@@ -1,5 +1,1 @@
-# helloworld
-first test repository
-
-
-test:first edit readme file for first commit test
+helloworld repository will be used for c language study
