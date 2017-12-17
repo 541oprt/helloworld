@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,16 @@ public class QuizActivity extends AppCompatActivity {
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
     private TextView mQuestionTextView;
+    private static final String KEY_INDEX = "index";
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.i(TAG, "onSaveInstanceState");
+        outState.putInt(KEY_INDEX,mCurrentIndex);
+    }
+
+    private static final String TAG = "QuizActivity";
 
     private Question[] mQuestionBank = new Question[]{
             new Question(R.string.question_oceans,true),
@@ -34,21 +45,58 @@ public class QuizActivity extends AppCompatActivity {
     private void updateQuestion(){
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
+        String funcName = "updateQuestion()";
+        Log.d(TAG, funcName+" trace is :"+Log.getStackTraceString(new Exception()));
     }
 
-    private void checkAnswer(boolean userPressdTrue){
+    private void checkAnswer(boolean userPressedTrue){
         boolean answer = mQuestionBank[mCurrentIndex].isAnswerTrue();
-        if(userPressdTrue == answer){
+        if(userPressedTrue == answer){
             Toast.makeText(this, R.string.correct_toast,Toast.LENGTH_SHORT).show();
         }
         else {
             Toast.makeText(this,R.string.incorrec_toast,Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG,"onStart called");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause called");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume called");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop called");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy called");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG,"onCreate called");
         setContentView(R.layout.activity_quiz);
+        if(savedInstanceState != null){
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mQuestionTextView = (TextView) findViewById(R.id.quiz_text);
 
